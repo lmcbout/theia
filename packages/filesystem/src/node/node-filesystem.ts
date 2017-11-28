@@ -95,6 +95,41 @@ Actual: ${JSON.stringify(file)}.`);
         throw new Error(`Error occurred while writing file content. The file does not exist under ${file.uri}.`);
     }
 
+    async setContentBase64(file: FileStat, content: string): Promise<FileStat> {
+        const _uri = new URI(file.uri);
+        const stat = await this.doGetStat(_uri, 0);
+        if (!stat) {
+            throw new Error(`Cannot find file under the given URI. URI: ${file.uri}.`);
+        }
+        if (stat.isDirectory) {
+            throw new Error(`Cannot set the content of a directory. URI: ${file.uri}.`);
+        }
+        if (!(await this.isInSync(file, stat))) {
+            throw new Error(`File is out of sync. URI: ${file.uri}.
+Expected: ${JSON.stringify(stat)}.
+Actual: ${JSON.stringify(file)}.`);
+        }
+        // JB begin
+        // const JBoptions = { encoding: "base64" };
+        console.log("--JBJB  ENCODING:  BINARY");
+        //  const objJsonStr = JSON.stringify(content);
+        const buffer = Buffer.from(content, 'base64');
+        // const jbdecoder = new Buffer(content).toString("base64");
+        // const jbdecoder = new Buffer(content).toString("binary");
+        // const jsondecode = new Buffer(content, 'base64').toString('ascii');
+        // await fs.writeFile(FileUri.fsPath(_uri), jbdecoder);
+        // await fs.writeFile(FileUri.fsPath(_uri), content, JBoptions);
+        await fs.writeFile(FileUri.fsPath(_uri), buffer);
+        // JB END
+        // await fs.writeFile(FileUri.fsPath(_uri), content, { encoding });
+        const newStat = await this.doGetStat(_uri, 1);
+        if (newStat) {
+            return newStat;
+        }
+        throw new Error(`Error occurred while writing file content. The file does not exist under ${file.uri}.`);
+
+    }
+
     protected async isInSync(file: FileStat, stat: FileStat): Promise<boolean> {
         if (stat.lastModification === file.lastModification && stat.size === file.size) {
             return true;
