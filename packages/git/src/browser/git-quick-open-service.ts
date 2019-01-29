@@ -17,7 +17,7 @@
 import { injectable, inject } from 'inversify';
 import { QuickOpenItem, QuickOpenMode, QuickOpenModel } from '@theia/core/lib/browser/quick-open/quick-open-model';
 import { QuickOpenService, QuickOpenOptions } from '@theia/core/lib/browser/quick-open/quick-open-service';
-import { Git, Repository, Branch, BranchType, Tag } from '../common';
+import { Git, Repository, Branch, BranchType, Tag, Remote } from '../common';
 import { GitRepositoryProvider } from './git-repository-provider';
 import { MessageService } from '@theia/core/lib/common/message-service';
 import URI from '@theia/core/lib/common/uri';
@@ -124,7 +124,7 @@ export class GitQuickOpenService {
     async performDefaultGitAction(action: GitAction): Promise<void> {
         const repository = this.getRepository();
         const remote = await this.getRemotes();
-        const defaultRemote = remote[0];
+        const defaultRemote = remote[0].name;
         if (repository) {
             try {
                 if (action === GitAction.PULL) {
@@ -151,7 +151,11 @@ export class GitQuickOpenService {
                     this.gitErrorHandler.handleError(error);
                 }
             };
-            const items = remotes.map(remote => new GitQuickOpenItem(remote, execute));
+            const items = remotes.map(remote => {
+                const toLabel = () => remote.name;
+                const toDescription = () => remote.push;
+                return new GitQuickOpenItem(remote, execute, toLabel, toDescription);
+            });
             const branchName = currentBranch ? `'${currentBranch.name}' ` : '';
             this.open(items, `Pick a remote to push the currently active branch ${branchName}to:`);
         }
@@ -161,10 +165,10 @@ export class GitQuickOpenService {
         const repository = this.getRepository();
         if (repository) {
             const remotes = await this.getRemotes();
-            const defaultRemote = remotes[0]; // I wish I could use assignment destructuring here. (GH-413)
-            const executeRemote = async (remoteItem: GitQuickOpenItem<string>) => {
+            const defaultRemote = remotes[0].name; // I wish I could use assignment destructuring here. (GH-413)
+            const executeRemote = async (remoteItem: GitQuickOpenItem<Remote>) => {
                 // The first remote is the default.
-                if (remoteItem.ref === defaultRemote) {
+                if (remoteItem.ref.name === defaultRemote) {
                     try {
                         await this.git.pull(repository, { remote: remoteItem.getLabel() });
                     } catch (error) {
@@ -175,7 +179,7 @@ export class GitQuickOpenService {
                     const branches = await this.getBranches();
                     const executeBranch = async (branchItem: GitQuickOpenItem<Branch>) => {
                         try {
-                            await this.git.pull(repository, { remote: remoteItem.ref, branch: branchItem.ref.nameWithoutRemote });
+                            await this.git.pull(repository, { remote: remoteItem.ref.name, branch: branchItem.ref.nameWithoutRemote });
                         } catch (error) {
                             this.gitErrorHandler.handleError(error);
                         }
@@ -188,7 +192,11 @@ export class GitQuickOpenService {
                     this.open(branchItems, 'Select the branch to pull the changes from:');
                 }
             };
-            const remoteItems = remotes.map(remote => new GitQuickOpenItem(remote, executeRemote));
+            const remoteItems = remotes.map(remote => {
+                const toLabel = () => remote.name;
+                const toDescription = () => remote.fetch;
+                return new GitQuickOpenItem(remote, executeRemote, toLabel, toDescription);
+            });
             this.open(remoteItems, 'Pick a remote to pull the branch from:');
         }
     }
@@ -356,10 +364,10 @@ export class GitQuickOpenService {
         return this.repositoryProvider.selectedRepository;
     }
 
-    private async getRemotes(): Promise<string[]> {
+    private async getRemotes(): Promise<Remote[]> {
         const repository = this.getRepository();
         try {
-            return repository ? await this.git.remote(repository) : [];
+            return repository ? await this.git.remote(repository, { verbose: true }) : [];
         } catch (error) {
             this.gitErrorHandler.handleError(error);
             return [];
