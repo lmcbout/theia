@@ -175,7 +175,7 @@ export interface ProblemMatcherContribution {
 }
 
 export interface ProblemPatternContribution {
-    name?: string;
+    name: string;
     regexp: string;
 
     kind?: string;
@@ -201,7 +201,7 @@ export interface TaskDefinitionRegistry {
 export const ProblemPatternRegistry = Symbol('ProblemPatternRegistry');
 export interface ProblemPatternRegistry {
     onReady(): Promise<void>;
-    register(key: string, value: ProblemPatternContribution | ProblemPatternContribution[]): void;
+    register(value: ProblemPatternContribution | ProblemPatternContribution[]): void;
     get(key: string): undefined | ProblemPattern | ProblemPattern[];
 }
 

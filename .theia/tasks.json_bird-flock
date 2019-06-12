@@ -1,0 +1,90 @@
+{
+        "tasks": [
+                {
+                        "label": "[Task] Gulp sass",
+                        "type": "process",
+                        "cwd": "${workspaceFolder}/project/",
+                        "command": "gulp",
+                        "args": [
+                                "sass"
+                        ]
+                },
+                {
+                        "label": "[Task] Gulp hello",
+                        "type": "shell",
+                        "cwd": "${workspaceFolder}/project/",
+                        "command": "gulp",
+                        "args": [
+                                "hello"
+                        ]
+                },
+                {
+                        "label": "[Task] Gulp watch",
+                        "type": "shell",
+                        "cwd": "${workspaceFolder}/project/",
+                        "command": "gulp",
+                        "args": [
+                                "watch"
+                        ]
+                },
+                {
+                        "label": "[Task] LS",
+                        "type": "shell",
+                        "cwd": "${workspaceFolder}/project",
+                        "command": "ls",
+                        "args": [
+                                "-aRl"
+                        ]
+                },
+                {
+                        "label": "[Task] recursively list files from workspace root",
+                        "type": "shell",
+                        "cwd": "${workspaceFolder}",
+                        "command": "ls",
+                        "args": [
+                                "-alR"
+                        ],
+                        "windows": {
+                                "command": "cmd.exe",
+                                "args": [
+                                        "/c",
+                                        "dir",
+                                        "/s"
+                                ]
+                        }
+                },
+                {
+                        "label": "[Task] clang-tidy",
+                        "type": "shell",
+                        "cwd": "${workspaceFolder}",
+                        "command": "clang-tidy",
+                        "args": [
+                                "Vector.h"
+                        ],
+                        "options": {},
+                        "problemMatcher": [
+                                "$whatevername"
+                        ]
+                        // {
+                        //         "name": "whatevername",
+                        //         "owner": "clang-tidy",
+                        //         "source": "TASKclang-tidy",
+                        //         "applyTo": "alldocuments",
+                        //         "fileLocation": [
+                        //                 "absolute"
+                        //         ],
+                        //         "pattern": [
+                        //                 {
+                        //                         "regexp": "^(.+):(\\d+):(\\d+):\\s+(error|warning|info|note):\\s+(.+?)\\s+\\[(.+)\\]$",
+                        //                         "file": 1,
+                        //                         "line": 2,
+                        //                         "character": 3,
+                        //                         "severity": 4,
+                        //                         "message": 5,
+                        //                         "code": 6
+                        //                 }
+                        //         ]
+                        // }
+                }
+        ]
+}

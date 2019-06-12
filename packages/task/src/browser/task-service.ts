@@ -313,8 +313,10 @@ export class TaskService implements TaskConfigurationClient {
         const resolvedMatchers: ProblemMatcher[] = [];
         // resolve matchers before passing them to the server
         for (const matcher of matchers) {
+            console.log();
             let resolvedMatcher: ProblemMatcher | undefined;
             if (typeof matcher === 'string') {
+                console.log();
                 resolvedMatcher = this.problemMatcherRegistry.get(matcher);
             } else {
                 resolvedMatcher = await this.problemMatcherRegistry.getProblemMatcherFromContribution(matcher);

@@ -1,56 +1,112 @@
 {
-    // comment
-    "tasks": [
-        {
-            "label": "test task",
-            "type": "shell",
-            "cwd": "${workspaceFolder}",
-            "command": "./task",
-            "args": [
-                "test"
-            ],
-            "options": {},
-            "windows": {
-                "command": "cmd.exe",
-                "args": [
-                    "/c",
-                    "task.bat",
-                    "abc"
-                ]
-            }
-        },
-        {
-            "label": "long running test task",
-            "type": "shell",
-            "cwd": "${workspaceFolder}",
-            "command": "./task-long-running",
-            "args": [],
-            "options": {},
-            "windows": {
-                "command": "cmd.exe",
-                "args": [
-                    "/c",
-                    "task-long-running.bat",
-                    "abc"
-                ]
-            }
-        },
-        {
-            "label": "list all files",
-            "type": "shell",
-            "cwd": "${workspaceFolder}",
-            "command": "ls",
-            "args": [
-                "-alR",
-                "/"
-            ],
-            "windows": {
-                "command": "cmd.exe",
-                "args": [
-                    "/c",
-                    "dir"
-                ]
-            }
-        }
-    ]
+  // comment
+  "tasks": [
+    {
+      "label": "test task",
+      "type": "shell",
+      "cwd": "${workspaceFolder}",
+      "command": "./task",
+      "args": [
+        "test"
+      ],
+      "options": {},
+      "windows": {
+        "command": "cmd.exe",
+        "args": [
+          "/c",
+          "task.bat",
+          "abc"
+        ]
+      }
+    },
+    {
+      "label": "long running test task",
+      "type": "shell",
+      "cwd": "${workspaceFolder}",
+      "command": "./task-long-running",
+      "args": [],
+      "options": {},
+      "windows": {
+        "command": "cmd.exe",
+        "args": [
+          "/c",
+          "task-long-running.bat",
+          "abc"
+        ]
+      }
+    },
+    {
+      "label": "list all files",
+      "type": "shell",
+      "cwd": "${workspaceFolder}",
+      "command": "ls",
+      "args": [
+        "-alR",
+        "/"
+      ],
+      "windows": {
+        "command": "cmd.exe",
+        "args": [
+          "/c",
+          "dir"
+        ]
+      }
+    },
+    {
+      "label": "list all files in Theia packages",
+      "type": "shell",
+      "cwd": "${workspaceFolder}",
+      "command": "ls",
+      "args": [
+        "-alR",
+        "${HOME}/theia/theia/packages"
+      ]
+    },
+    {
+      "label": "JB long running test task 5",
+      "type": "shell",
+      "cwd": "${workspaceFolder}",
+      "command": "./jbtask-long-running",
+      "args": [],
+      "options": {},
+      "windows": {
+        "command": "cmd.exe",
+        "args": [
+          "/c",
+          "task-long-running.bat",
+          "abc"
+        ]
+      }
+    },
+    {
+      "label": "[Task] clang-tidy",
+      "type": "shell",
+      "cwd": "${workspaceFolder}",
+      "command": "clang-tidy",
+      "args": [
+        "${HOME}/theia/workspace-cpp/bird-flocking-sim-tbb/Vector.h"
+      ],
+      "options": {},
+      "problemMatcher": {
+        "name": "whatevername",
+        "owner": "clang-tidy",
+        "source": "TASKclang-tidy",
+        "applyTo": "alldocuments",
+        "fileLocation": [
+          "absolute"
+        ],
+        "pattern": [
+          {
+            "regexp": "^(.+):(\\d+):(\\d+):\\s+(error|warning|info|note):\\s+(.+?)\\s+\\[(.+)\\]$",
+            "file": 1,
+            "line": 2,
+            "character": 3,
+            "severity": 4,
+            "message": 5,
+            "code": 6
+          }
+        ]
+      }
+    }
+  ]
 }

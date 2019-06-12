@@ -39,16 +39,16 @@ export class ProblemPatternRegistryImpl implements ProblemPatternRegistry {
         return this.readyPromise;
     }
 
-    register(key: string, value: ProblemPatternContribution | ProblemPatternContribution[]): void {
+    register(value: ProblemPatternContribution | ProblemPatternContribution[]): void {
         if (Array.isArray(value)) {
-            value.forEach(problemPatternContribution => this.register(key, problemPatternContribution));
+            value.forEach(problemPatternContribution => this.register(problemPatternContribution));
         } else {
             if (!value.name) {
                 console.error('Only named Problem Patterns can be registered.');
                 return;
             }
             const problemPattern = ProblemPattern.fromProblemPatternContribution(value);
-            this.add(key, problemPattern);
+            this.add(problemPattern.name!, problemPattern);
         }
     }
 

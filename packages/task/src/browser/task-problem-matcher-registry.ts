@@ -50,12 +50,16 @@ export class ProblemMatcherRegistryImpl implements ProblemMatcherRegistry {
     }
 
     async register(matcher: ProblemMatcherContribution): Promise<void> {
+        console.log();
         if (!matcher.name) {
             console.error('Only named Problem Matchers can be registered.');
             return;
         }
+        console.log();
         const problemMatcher = await this.getProblemMatcherFromContribution(matcher);
+        console.log();
         this.add(problemMatcher as NamedProblemMatcher);
+        console.log();
     }
 
     get(name: string): NamedProblemMatcher | undefined {

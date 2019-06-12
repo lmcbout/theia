@@ -25,7 +25,8 @@ import { TaskExitedEvent } from '../../common/task-protocol';
 // Escape codes
 // http://en.wikipedia.org/wiki/ANSI_escape_code
 const EL = /\x1B\x5B[12]?K/g; // Erase in line
-const COLOR_START = /\x1b\[\d+m/g; // Color
+// const COLOR_START = /\x1b\[\d+m/g; // Color
+const COLOR_START = /\x1b\[\d+(;\d+)*m/g;
 const COLOR_END = /\x1b\[0?m/g; // Color
 
 export function removeAnsiEscapeCodes(str: string): string {

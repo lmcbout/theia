@@ -165,7 +165,7 @@ export class PluginContributionHandler {
         }
 
         if (contributions.problemPatterns) {
-            contributions.problemPatterns.forEach(pattern => this.problemPatternRegistry.register(pattern.name!, pattern));
+            contributions.problemPatterns.forEach(pattern => this.problemPatternRegistry.register(pattern));
         }
 
         if (contributions.problemMatchers) {
